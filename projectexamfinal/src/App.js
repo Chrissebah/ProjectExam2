@@ -3,6 +3,9 @@ import './App.css';
 import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import Content from './pages/content';
 import Profile from './pages/profile';
+import ItemDetailsPage from './pages/itemDetailsPage';
+import NotFoundPage from './pages/notFoundPage';
+
 
 function App() {
   const [email, setEmail] = useState('');
@@ -210,6 +213,8 @@ function App() {
             } />
             <Route path="/profile" element={<Profile />} />
             <Route path="/content" element={<Content />} />
+            <Route path="/item/:venueId" element={<ItemDetailsPage />} />
+            <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </header>
         <footer className="App-footer">
