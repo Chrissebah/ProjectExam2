@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import placeholderImage from '../images/noimagefound.jpg';
+
 
 function Content() {
   const [venues, setVenues] = useState([]);
@@ -60,7 +62,19 @@ function Content() {
                 <div><h4>{venue.name}</h4> </div>
                 <div><strong>Description:</strong> {truncateDescription(venue.description)}</div>
                 <div>
-                  {venue.media.length > 0 && <img src={venue.media[0]} alt={`Venue media`} style={{ width: '100px', height: 'auto', marginRight: '10px' }} />}
+                  {venue.media.length > 0 ? (
+                    <img
+                      src={venue.media[0]}
+                      alt={`Venue media`}
+                      style={{ width: '150px', height: 'auto', marginRight: '10px' }}
+                    />
+                  ) : (
+                    <img
+                    src={placeholderImage}
+                    alt="Placeholder"
+                    style={{ width: '150px', height: 'auto', marginRight: '10px' }}
+                  />
+                  )}
                 </div>
                 <div><strong>Price:</strong> ${venue.price}</div>
               </Link>
@@ -68,6 +82,7 @@ function Content() {
           ))}
         </ul>
       )}
+      
     </div>
   );
 }

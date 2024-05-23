@@ -5,7 +5,7 @@ import Content from './pages/content';
 import Profile from './pages/profile';
 import ItemDetailsPage from './pages/itemDetailsPage';
 import NotFoundPage from './pages/notFoundPage';
-
+import CreateVenuePage from './pages/CreateVenuePage';
 
 function App() {
   const [email, setEmail] = useState('');
@@ -44,6 +44,7 @@ function App() {
         if (responseData?.accessToken) {
          
           localStorage.setItem('token', responseData.accessToken);
+          localStorage.setItem('name', responseData.name);
   
           
           setIsLoggedIn(true);
@@ -51,7 +52,7 @@ function App() {
          
         } else {
           
-          throw new Error('Access token not found in response');
+          throw new Error('Access token or user name not found in response');
         }
       } else {
        
@@ -137,9 +138,11 @@ function App() {
         <nav className="navbar navbar-expand-lg bg-primary" data-bs-theme="dark">
           <div className="container-fluid">
             <span className="navbar-brand">Holidaze</span>
-          </div>
+          </div> 
+          {isLoggedIn && <Link to="/create-venue" className="btn btn-secondary me-2" style={{ fontSize: '14px', padding: '5px 10px', whiteSpace: 'nowrap' }}>Create Venue</Link>}
           <Link to="/content" className="btn btn-secondary me-2">Home</Link>
           <Link to="/profile" className="btn btn-secondary me-2">Profile</Link>
+         
       
         </nav>
         <header className="App-header">
@@ -214,6 +217,7 @@ function App() {
             <Route path="/profile" element={<Profile />} />
             <Route path="/content" element={<Content />} />
             <Route path="/item/:venueId" element={<ItemDetailsPage />} />
+            <Route path="/create-venue" element={<CreateVenuePage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
         </header>
