@@ -169,6 +169,14 @@ h1 {
   color: black;
 }
 
+.profileVenues {
+  margin-top: 20px;
+  background-color: #fa5204;
+  color: white;
+  max-width: 800px;
+  min-width: 50%;
+  border: 1px solid rgb(0, 0, 0);
+}
 
 
 @media screen and (max-width: 850px) {

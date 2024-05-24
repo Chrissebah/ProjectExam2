@@ -8,9 +8,10 @@ function Content() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
-  const limit = 100; 
+  const limit = 100;
   const [sort, setSort] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
+  const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
     const fetchVenues = async () => {
@@ -45,7 +46,7 @@ function Content() {
     };
 
     fetchVenues();
-  }, [page, limit, sort, sortOrder]); 
+  }, [page, limit, sort, sortOrder]);
 
   const nextPage = () => {
     setPage(page + 1);
@@ -63,6 +64,15 @@ function Content() {
     setSortOrder(e.target.value);
   };
 
+  const handleSearchInputChange = (e) => {
+    setSearchQuery(e.target.value);
+  };
+
+  const filteredVenues = venues.filter((venue) =>
+    venue.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    venue.location.country.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
   return (
     <div className="content">
       <h2>Venues</h2>
@@ -71,22 +81,29 @@ function Content() {
         <select value={sort} onChange={handleSortChange}>
           <option value="name">Name</option>
           <option value="price">Price</option>
+          <option value="id">ID</option>
         </select>{' '}
         <select value={sortOrder} onChange={handleSortOrderChange}>
           <option value="asc">Ascending</option>
           <option value="desc">Descending</option>
         </select>
       </div>
+      <input
+        type="text"
+        placeholder="Search name,country,ID "
+        value={searchQuery}
+        onChange={handleSearchInputChange}
+      />
       {loading ? (
         <p>Loading...</p>
       ) : error ? (
         <p>{error}</p>
-      ) : venues.length === 0 ? (
+      ) : filteredVenues.length === 0 ? (
         <p>No venues available.</p>
       ) : (
         <React.Fragment>
           <ul>
-            {venues.map((venue) => (
+            {filteredVenues.map((venue) => (
               <li key={venue.id}>
                 <Link to={`/item/${venue.id}`}>
                   <div>
@@ -116,12 +133,20 @@ function Content() {
                   <div>
                     <strong>Country:</strong> {venue.location.country}
                   </div>
+                  <div>
+                    <h6><b>ID: </b>{venue.id}</h6>
+                  </div>
                 </Link>
               </li>
             ))}
           </ul>
           <div style={{ marginTop: '10px' }}>
-            <button onClick={previousPage} className="btn btn-info" disabled={page === 1} style={{ marginRight: '5px' }}>
+            <button
+              onClick={previousPage}
+              className="btn btn-info"
+              disabled={page === 1}
+              style={{ marginRight: '5px' }}
+            >
               Previous Page
             </button>
             <button onClick={nextPage} className="btn btn-info" style={{ marginLeft: '5px' }}>
