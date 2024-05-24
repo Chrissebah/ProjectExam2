@@ -139,7 +139,7 @@ function App() {
           <div className="container-fluid">
             <span className="navbar-brand">Holidaze</span>
           </div> 
-          {isLoggedIn && <Link to="/create-venue" className="btn btn-secondary me-2" style={{ fontSize: '14px', padding: '5px 10px', whiteSpace: 'nowrap' }}>Create Venue</Link>}
+          {isLoggedIn && <Link to="/create-venue" className="btn btn-success me-2" style={{ fontSize: '14px', padding: '5px 10px', whiteSpace: 'nowrap' }}>Create Venue</Link>}
           <Link to="/content" className="btn btn-secondary me-2">Home</Link>
           <Link to="/profile" className="btn btn-secondary me-2">Profile</Link>
          
