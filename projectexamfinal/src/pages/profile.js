@@ -273,6 +273,12 @@ function Profile() {
     }
   };
 
+  const handleLogOut = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('name');
+    window.location.href = '/';
+  };
+
   return (
     <div className="profilebox">
       <h2>Profile</h2>
@@ -306,6 +312,7 @@ function Profile() {
               {venueManager ? 'Remove Venue Manager' : 'Make Venue Manager'}
             </button>
           </div>
+          <button onClick={handleLogOut} className="btn btn-secondary" style={{ marginTop: '10px' }}>Log Out</button>
         </div>
       )}
 
@@ -335,27 +342,30 @@ function Profile() {
               <p><strong>Updated:</strong> {booking.updated}</p>
               <div>
                 <input
+                style={{ marginLeft: '3px' }}
                   type="date"
                   name="dateFrom"
                   value={editBooking.dateFrom}
                   onChange={handleEditInputChange}
                 />
                 <input
+                style={{ marginLeft: '3px' }}
                   type="date"
                   name="dateTo"
                   value={editBooking.dateTo}
                   onChange={handleEditInputChange}
                 />
                 <input
+                style={{ marginLeft: '3px' }}
                   type="number"
                   name="guests"
                   placeholder="Number of guests"
                   value={editBooking.guests}
                   onChange={handleEditInputChange}
                 />
-                <button onClick={handleEditFormSubmit(booking.id)}>Submit</button>
+                <button onClick={handleEditFormSubmit(booking.id)} style={{ marginLeft: '10px' }}>Submit</button>
               </div>
-              <button onClick={() => handleDeleteBooking(booking.id)} className="btn btn-danger">Delete</button>
+              <button onClick={() => handleDeleteBooking(booking.id)} className="btn btn-danger" style={{ marginTop: '10px' }}>Delete</button>
             </div>
           ))
         ) : (
