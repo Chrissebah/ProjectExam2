@@ -178,6 +178,10 @@ h1 {
   border: 1px solid rgb(0, 0, 0);
 }
 
+.profileBookings {
+  margin-top: 20px;
+}
+
 
 @media screen and (max-width: 850px) {
   .content li div:nth-child(2) {

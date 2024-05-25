@@ -6,23 +6,35 @@ function ItemDetailsPage() {
   const [venue, setVenue] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [booking, setBooking] = useState(null);
+  const [bookings, setBookings] = useState([]);
   const [newImage, setNewImage] = useState('');
+  const [newBooking, setNewBooking] = useState({
+    dateFrom: '',
+    dateTo: '',
+    guests: 1,
+  });
   const { venueId } = useParams();
 
   useEffect(() => {
     const fetchVenueDetails = async () => {
       try {
         setLoading(true);
-        const response = await axios.get(`https://api.noroff.dev/api/v1/holidaze/venues/${venueId}`);
-        setVenue(response.data);
+        const token = localStorage.getItem('token');
+        const venueResponse = await axios.get(`https://api.noroff.dev/api/v1/holidaze/venues/${venueId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setVenue(venueResponse.data);
         setError(null);
 
-        if (response.data.bookings && response.data.bookings.length > 0) {
-          const newestBookingId = response.data.bookings[0].id;
-          const bookingResponse = await axios.get(`https://api.noroff.dev/api/v1/holidaze/bookings/${newestBookingId}`);
-          setBooking(bookingResponse.data);
-        }
+        const bookingsResponse = await axios.get(`https://api.noroff.dev/api/v1/holidaze/bookings`, {
+          params: { _venue: true, venueId },
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        setBookings(bookingsResponse.data);
       } catch (error) {
         console.error('Error fetching data:', error);
         setError('An error occurred while fetching data.');
@@ -54,7 +66,6 @@ function ItemDetailsPage() {
       });
 
       console.log('Venue updated successfully:', response.data);
-      
       setVenue(response.data);
     } catch (error) {
       console.error('Error updating venue:', error);
@@ -71,6 +82,43 @@ function ItemDetailsPage() {
     setNewImage(event.target.value);
   };
 
+  const handleNewBookingChange = (event) => {
+    const { name, value } = event.target;
+    setNewBooking({ ...newBooking, [name]: value });
+  };
+
+  const handleAddBooking = async (event) => {
+    event.preventDefault();
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        throw new Error('Authentication token not found');
+      }
+
+      const bookingData = {
+        ...newBooking,
+        venueId: venueId,
+      };
+
+      const response = await axios.post('https://api.noroff.dev/api/v1/holidaze/bookings', bookingData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log('Booking created successfully:', response.data);
+      setBookings([...bookings, response.data]);
+      setNewBooking({
+        dateFrom: '',
+        dateTo: '',
+        guests: 1,
+      });
+    } catch (error) {
+      console.error('Error creating booking:', error);
+      setError('An error occurred while creating booking.');
+    }
+  };
+
   const handleDeleteVenue = async () => {
     try {
       const token = localStorage.getItem('token');
@@ -84,7 +132,6 @@ function ItemDetailsPage() {
         },
       });
 
-      // Redirect to home page after successful deletion
       window.location.href = '/';
     } catch (error) {
       console.error('Error deleting venue:', error);
@@ -129,16 +176,40 @@ function ItemDetailsPage() {
           <div><strong>Location:</strong></div>
           <p>{venue.location.address}, {venue.location.city}, {venue.location.zip}, {venue.location.country}</p>
           
-          {booking && (
-            <div className="booking-details">
-              <h3>Newest Booking</h3>
-              <p><strong>From:</strong> {booking.dateFrom}</p>
-              <p><strong>To:</strong> {booking.dateTo}</p>
-              <p><strong>Guests:</strong> {booking.guests}</p>
-              <p><strong>Created:</strong> {booking.created}</p>
-              <p><strong>Updated:</strong> {booking.updated}</p>
+
+          <form onSubmit={handleAddBooking}>
+            <h3>Add New Booking</h3>
+            <label>
+              From:
+              <input type="date" name="dateFrom" value={newBooking.dateFrom} onChange={handleNewBookingChange} required />
+            </label>
+            <label>
+              To:
+              <input type="date" name="dateTo" value={newBooking.dateTo} onChange={handleNewBookingChange} required />
+            </label>
+            <label>
+              Guests:
+              <input type="number" name="guests" value={newBooking.guests} onChange={handleNewBookingChange} required min="1" />
+            </label>
+            <button type="submit">Add Booking</button>
+          </form>
+
+          {bookings.length > 0 && (
+            <div className="booking-list">
+              <h3>Bookings</h3>
+              {bookings.map((booking) => (
+                <div key={booking.id} className="booking-item">
+                  <p><strong>From:</strong> {booking.dateFrom}</p>
+                  <p><strong>To:</strong> {booking.dateTo}</p>
+                  <p><strong>Guests:</strong> {booking.guests}</p>
+                  <p><strong>Created:</strong> {booking.created}</p>
+                  <p><strong>Updated:</strong> {booking.updated}</p>
+                </div>
+              ))}
             </div>
           )}
+
+          
 
           <form onSubmit={handleFormSubmit}>
             <label>
@@ -147,7 +218,7 @@ function ItemDetailsPage() {
             </label>
             <label>
               Description:
-              <input type="text" name="description" value={venue.description} onChange={handleInputChange} />
+              <input type="text" name= "description" value={venue.description} onChange={handleInputChange} />
             </label>
             <label>
               New Image URL:
@@ -157,7 +228,7 @@ function ItemDetailsPage() {
             <button type="submit">Update Venue</button>
           </form>
 
-          <button onClick={handleDeleteVenue} className="btn btn-danger" style={{ marginTop: '10px'  }}>Delete Venue</button>
+          <button onClick={handleDeleteVenue} className="btn btn-danger" style={{ marginTop: '10px' }}>Delete Venue</button>
         </div>
       )}
     </div>
