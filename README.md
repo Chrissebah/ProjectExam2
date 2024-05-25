@@ -11,6 +11,7 @@ This is my final exam. I made my main focus on making the react work. Despite my
 ![image](https://github.com/Chrissebah/SemesterProject-1/assets/19626783/14208c76-3b50-4fba-82e4-a20e2824f50b)
 ![image](https://github.com/Chrissebah/SemesterProject-1/assets/19626783/2f9db9f0-3997-453b-ab65-d6bdcadca8d6)
 ![image](https://github.com/Chrissebah/SemesterProject-1/assets/19626783/98aea41e-7934-4cb2-8071-6a7ab7f3aed9)
+![image](https://github.com/devicons/devicon/blob/master/icons/react/react-original.svg)
 
 ## Deployed Website
 https://chrissebah-project-exam-2.netlify.app/
