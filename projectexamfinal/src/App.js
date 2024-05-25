@@ -38,7 +38,7 @@ function App() {
       if (response.ok) {
        
         const responseData = await response.json();
-        console.log('Login successful:', responseData);
+        
   
         
         if (responseData?.accessToken) {
@@ -56,8 +56,6 @@ function App() {
         }
       } else {
        
-        const errorData = await response.json();
-        console.error('Login failed:', errorData);
         setError('Login failed. Please check your credentials and try again.');
       }
     } catch (error) {
@@ -92,8 +90,6 @@ function App() {
       if (response.ok) {
         
         const responseData = await response.json();
-        console.log('Registration successful:', responseData);
-  
         
         if (responseData?.accessToken) {
           
@@ -110,9 +106,7 @@ function App() {
   
         
       } else {
-        
-        const errorData = await response.json();
-        console.error('Registration failed:', errorData);
+    
         setError('Registration failed. Please try again.');
       }
     } catch (error) {
