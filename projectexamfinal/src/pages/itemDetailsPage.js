@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import placeholderImage from '../images/noimagefound.jpg';
 
 function ItemDetailsPage() {
   const [venue, setVenue] = useState(null);
@@ -148,19 +149,25 @@ function ItemDetailsPage() {
       ) : (
         <div>
           <h2>{venue.name}</h2>
-          <p><strong>Description:</strong> {venue.description}</p>
-          {venue.media.length > 0 && (
-            <div className="venue-images">
-              {venue.media.map((mediaUrl, index) => (
-                <img
-                  key={index}
-                  src={mediaUrl}
-                  alt={`Venue media ${index + 1}`}
-                  style={{ width: '200px', height: 'auto', marginBottom: '10px', marginRight: '10px' }}
-                />
-              ))}
-            </div>
-          )}
+            <p><strong>Description:</strong> {venue.description}</p>
+            {venue.media.length > 0 ? (
+              <div className="venue-images">
+                {venue.media.map((mediaUrl, index) => (
+                  <img
+                    key={index}
+                    src={mediaUrl}
+                    alt={`Venue media ${index + 1}`}
+                    style={{ width: '200px', height: 'auto', marginBottom: '10px', marginRight: '10px' }}
+                  />
+                ))}
+              </div>
+            ) : (
+              <img
+                src={placeholderImage}
+                alt="Placeholder"
+                style={{ width: '150px', height: 'auto', marginRight: '10px' }}
+              />
+            )}
           <p><strong>Price:</strong> ${venue.price}</p>
           <p><strong>Max Guests:</strong> {venue.maxGuests}</p>
           <p><strong>Rating:</strong> {venue.rating}</p>

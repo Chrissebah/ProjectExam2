@@ -68,7 +68,16 @@ function App() {
     try {
      
       setError(null);
-  
+
+      if (!email.endsWith('@stud.noroff.no')) {
+        setError('Invalid email. Please use an email with the domain @stud.noroff.no.');
+        return;
+      }
+
+      if (password.length < 8) {
+        setError('Password must be at least 8 characters long.');
+        return;
+      }
    
       const registerData = {
         name: username,
